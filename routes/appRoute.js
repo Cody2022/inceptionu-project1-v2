@@ -10,7 +10,7 @@ const path=require('path')
 const {weatherOfCity, localWeather, geoLocation}=require('../model/game')
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 appRouter.get("/weather", localWeather);
 
@@ -21,5 +21,4 @@ appRouter.get("/weather/q", weatherOfCity);
 appRouter.get("/index", (req,res)=>{
     let indexPath=path.join(__dirname,'..','public','index.html');
     res.sendFile(indexPath);
-    // res.send("hello world")
-  });
+});
