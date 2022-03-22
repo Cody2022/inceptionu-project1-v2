@@ -22,7 +22,7 @@ gameRouter.get("/guess", weatherOfCity);   //city = req.query.city
 
 gameRouter.get("/add", async (req, res)=>{
     let city=req.query.city;
-    console.log("get-add City", city)
+    // console.log("get-add City", city)
     let addCityMessage=await addCity(city)
     console.log("Message:",addCityMessage)
     res.send(`${city} has been added to the game box`);

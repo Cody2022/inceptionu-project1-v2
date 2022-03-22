@@ -1,8 +1,11 @@
-const {APIkey_weather}=require('../API-key');
+
+require('dotenv').config()
 const fetch=require('node-fetch');
 const readlineAsync=require('readline-async');
-const readlineSync=require('readline-sync');
+// const readlineSync=require('readline-sync');
 
+const APIkey_weather=process.env.API_KEY;
+console.log("API key test:", APIkey_weather);
 
 const {createCity,
        findCityByName,
