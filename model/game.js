@@ -5,7 +5,11 @@ const readlineAsync=require('readline-async');
 // const readlineSync=require('readline-sync');
 
 const APIkey_weather=process.env.API_KEY;
+<<<<<<< HEAD
 console.log("API key test:", APIkey_weather);
+=======
+// console.log("API key test:", APIkey_weather);
+>>>>>>> 569eeef448579d3d491c37dd5517c184fa43cc4a
 
 const {createCity,
        findCityByName,
@@ -210,6 +214,10 @@ const initialize=async ()=>{
             // console.log("cityUpdatedT", cityUpdatedT)
         }
     }
+<<<<<<< HEAD
+=======
+   
+>>>>>>> 569eeef448579d3d491c37dd5517c184fa43cc4a
 }
 
 // -----
@@ -245,6 +253,75 @@ const start=async(accuracy)=>{
     }            
         return summary.concat({Scores:scores},guessRight)
 }
+<<<<<<< HEAD
+=======
+//-------
+
+const enter=async()=>{
+    let response=await fetch("https://freegeoip.app/json/").catch(error=>res.status(404).send(`Geo information for your city is not found!`))
+    let responseJson=response.json();
+
+    let cityArray=await findAll();
+    let scores=0;
+    let guessRight=[];
+    let summary=[];
+
+    for (city of cityArray) {
+        let intialScore=await updateTempByName({name:city.name}, {score:0});
+        let intialGuessTemp=await updateTempByName({name:city.name}, {guessTemp:-1000});
+    }
+
+    for (city of cityArray){
+        let response= await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.name}&units=metric&appid=${APIkey_weather}`);
+        let weatherJson=await response.json();
+
+        if (weatherJson.message) {console.log("error init:", weatherJson.message)}
+        else{
+            let cityUpdatedT=await updateTempByName({name:city.name}, {temperature:weatherJson.main.temp});
+        }
+    }
+
+    return responseJson;
+}
+//---------
+
+const guess=async(accuracy, city, temp)=>{
+
+        let intialScore=await updateTempByName({name:city}, {score:0});
+        let intialGuessTemp=await updateTempByName({name:city}, {guessTemp:temp});
+        let guessedCity={};
+
+        let response= await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIkey_weather}`);
+        let weatherJson=await response.json();
+        if (weatherJson.message) {console.log("error init:", weatherJson.message)}
+        else{
+            let cityUpdatedT=await updateTempByName({name:city}, {temperature:weatherJson.main.temp});
+            if (Math.abs(cityUpdatedT.temperature-temp)<=accuracy){
+                updatedScore=await updateTempByName({name:city}, {score:1});
+                console.log("guess function:", guessedCity)
+            }
+            guessedCity=await findCity(city);
+        }
+        return guessedCity;
+}
+
+const review=async ()=>{
+    let cityArray=await findAll();
+    let scores=0;
+    let guessRight=[];
+    let summary=[];
+    for (city of cityArray){
+         if (city.score===1){
+             guessRight.push({name:city.name,actualT:city.temperature, guessT: city.guessTemp, deltaT: Math.abs((city.temperature-city.guessTemp).toFixed(2))})
+             scores=scores+city.score;
+            }
+    }
+    return summary.concat({"Total Scores":scores},guessRight)
+
+}
+
+
+>>>>>>> 569eeef448579d3d491c37dd5517c184fa43cc4a
 
 
 module.exports={weatherOfCity, 
@@ -258,5 +335,12 @@ module.exports={weatherOfCity,
                 findAllCities,
                 updateCityTemperature,
                 initialize,
+<<<<<<< HEAD
                 start  
+=======
+                start,
+                enter,
+                guess,
+                review  
+>>>>>>> 569eeef448579d3d491c37dd5517c184fa43cc4a
             };
